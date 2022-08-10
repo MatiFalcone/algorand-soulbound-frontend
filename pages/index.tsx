@@ -15,7 +15,7 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a target="_blank" href="https://parsl.co">Parsl!</a>
+          Welcome to <a target="_blank" rel="noopener noreferrer" href="https://parsl.co">Parsl!</a>
         </h1>
 
         <p className={styles.description}>
@@ -68,6 +68,7 @@ const Home: NextPage = () => {
           <a
             href="https://github.com/MatiFalcone/algorand-soulbound/tree/main/python"
             target="_blank"
+            rel="noopener noreferrer"
             className={styles.card}
           >
             <h2>Examples &rarr;</h2>
