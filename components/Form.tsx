@@ -1,8 +1,8 @@
 import { Formik, Field, Form } from 'formik';
 
 export const Basic = () => (
-  <div>
-    <center><h1>Mint SoulBound Token</h1></center>
+  <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
+    <h1>Mint SoulBound Token</h1>
     <Formik
       initialValues={{
         orderId: '',
