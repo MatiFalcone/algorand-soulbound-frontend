@@ -2,24 +2,24 @@ import { Formik, Field, Form } from 'formik';
 
 export const Basic = () => (
   <div>
-    <h1>Sign Up</h1>
+    <center><h1>Mint SoulBound Token</h1></center>
     <Formik
       initialValues={{
-        firstName: '',
-        lastName: '',
+        orderId: '',
+        company: '',
         email: '',
       }}
       onSubmit={async (values) => {
         await new Promise((r) => setTimeout(r, 500));
         alert(JSON.stringify(values, null, 2));
       }}
-    >
+        >
       <Form>
-        <label htmlFor="firstName">First Name</label>
-        <Field id="firstName" name="firstName" placeholder="Jane" />
+        <label htmlFor="orderId">Order ID</label>
+        <Field id="orderId" name="orderId" placeholder="#123" />
 
-        <label htmlFor="lastName">Last Name</label>
-        <Field id="lastName" name="lastName" placeholder="Doe" />
+        <label htmlFor="company">Company</label>
+        <Field id="company" name="company" placeholder="Cannabis Business" />
 
         <label htmlFor="email">Email</label>
         <Field
@@ -28,7 +28,7 @@ export const Basic = () => (
           placeholder="jane@acme.com"
           type="email"
         />
-        <button type="submit">Submit</button>
+        <button type="submit">Issue Certificate</button>
       </Form>
     </Formik>
   </div>

@@ -26,10 +26,10 @@ const Home: NextPage = () => {
         <div className={styles.grid}>
 
           <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            href="/playground"
             className={styles.card}
           >
-            <h2>Play &rarr;</h2>
+            <h2>Playground &rarr;</h2>
             <p>
               Instantly mint, claim and revoke SBTs using AlgoSigner.
             </p>
@@ -41,7 +41,7 @@ const Home: NextPage = () => {
           >
             <h2>Video &rarr;</h2>
             <p>
-              Watch our pitch video to better understand our submission.
+            Watch our pitch video for a better comprehension of our submission.
             </p>
           </a>
 
