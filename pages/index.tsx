@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link';    
 import styles from '../styles/Home.module.css'
-import Link from 'next/link'
 
 const Home: NextPage = () => {
   return (
@@ -25,15 +25,14 @@ const Home: NextPage = () => {
 
         <div className={styles.grid}>
 
-          <Link
-            href="/playground"
-            className={styles.card}
-          >
+          <Link href="/playground">
+            <a className={styles.card}>
+              <h2>Playground &rarr;</h2>
+              <p>
+                Instantly mint, claim and revoke SBTs using AlgoSigner.
+              </p>
+            </a>
           </Link>
-          <h2>Playground &rarr;</h2>
-          <p>
-            Instantly mint, claim and revoke SBTs using AlgoSigner.
-          </p>
 
           <a
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
