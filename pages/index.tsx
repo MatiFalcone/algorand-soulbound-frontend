@@ -50,7 +50,7 @@ const Home: NextPage = () => {
             <p>Learn about our industry and the problem we are solving.</p>
           </a>
 
-          <a target="_blank" href="https://github.com/MatiFalcone/algorand-soulbound/blob/main/ARCs/arc-5114.md" className={styles.card}>
+          <a target="_blank" rel="noopener noreferrer" href="https://github.com/MatiFalcone/algorand-soulbound/blob/main/ARCs/arc-5114.md" className={styles.card}>
             <h2>Documentation &rarr;</h2>
             <p>Find out about ARC-5114 and how to implement SBTs in Algorand.</p>
           </a>
