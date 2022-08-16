@@ -4,6 +4,8 @@ import { GetServerSideProps } from "next";
 import styles from '../styles/Home.module.css'
 import { Claim } from '../components/Claim'
 import Router from "next/router";
+import databaseConnect from '../utils/connect';
+import Token from '../models/tokenModel';
 
 const Playground: NextPage = (props:any) => {
   
@@ -30,13 +32,26 @@ const Playground: NextPage = (props:any) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
+  var tokens;
+  try {
+    await databaseConnect();
+    tokens = await Token.find();
+
+  } catch(error) {
+    console.log(error);
+  }
   const ALGOD_SERVER = process.env.ALGOD_SERVER;
+  const ALGO_INDEXER = process.env.ALGO_INDEXER;
   const ALGOD_TOKEN = process.env.ALGOD_TOKEN;
+  const PARSL_MNEMONIC = process.env.PARSL_MNEMONIC;
   return {
     props: {
       ALGOD_SERVER,
-      ALGOD_TOKEN
+      ALGO_INDEXER,
+      ALGOD_TOKEN,
+      PARSL_MNEMONIC,
+      tokens: JSON.parse(JSON.stringify(tokens))
     }, // will be passed to the page component as props
   };
 };

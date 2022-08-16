@@ -8,7 +8,7 @@ import styles from '../styles/Home.module.css'
 const Role: NextPage = () => {
 
   const begin = () => {
-    Router.push('/connect_wallet')
+    Router.push('/mint')
   }
 
   const back = () => {

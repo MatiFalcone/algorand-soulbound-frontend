@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate, BrowserRouter } from 'react-router-dom';
 import Router from 'next/router'
 import type { NextPage } from 'next'
 import Head from 'next/head'

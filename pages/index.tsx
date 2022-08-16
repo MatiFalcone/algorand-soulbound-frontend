@@ -24,7 +24,7 @@ const Home: NextPage = () => {
 
         <div className={styles.grid}>
 
-          <Link href="/choose_role">
+          <Link href="/connect_wallet">
             <a className={styles.card}>
               <h2>Playground &rarr;</h2>
               <p>

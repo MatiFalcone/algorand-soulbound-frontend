@@ -38,7 +38,7 @@ const Playground: NextPage = () => {
             setAccountError(false);
             setAccountResponse(response[0]); //Currently only for one user
             localStorage.setItem("accountInformation", response[0].address);
-            Router.push('/mint')
+            Router.push('/choose_role')
           })
           .catch((e) => {
             setAccountError(true);

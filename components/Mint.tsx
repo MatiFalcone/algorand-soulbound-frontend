@@ -2,11 +2,31 @@ import { Formik, Field, Form } from 'formik';
 import styles from '../styles/Home.module.css'
 import algosdk from "algosdk";
 import crypto from "crypto";
+import Swal from "sweetalert2";
 
 declare var AlgoSigner: any;
 
 export const Mint = (props: any) => {
   
+  const createToken = async (assetId: Number, transactionId: String, claimer: String, company: String, risk: String) => {
+    const res = await fetch("/api/token/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }, 
+      body: JSON.stringify({
+        assetId,
+        transactionId,
+        claimer,
+        company,
+        risk,
+        claimed: false
+      })
+    })
+    const data = await res.json();
+    console.log(data);
+  }
+
   const issueSBT = async(props: any, values: any) => {
     console.log(values);
     const algodServer = props.props.ALGOD_SERVER;
@@ -19,7 +39,7 @@ export const Mint = (props: any) => {
     console.log(algodClient);
     let client: string = localStorage.getItem("accountInformation")!;
     // EHZMYXLWT7FNOTVS2DV6P4QDD6CKDLDJA5LTPWOZ7KQEA6RRCGJJSLPEDM
-    client = "EHZMYXLWT7FNOTVS2DV6P4QDD6CKDLDJA5LTPWOZ7KQEA6RRCGJJSLPEDM";
+    let parsl = "EHZMYXLWT7FNOTVS2DV6P4QDD6CKDLDJA5LTPWOZ7KQEA6RRCGJJSLPEDM";
     const sk = algosdk.mnemonicToSecretKey(props.props.PARSL_MNEMONIC).sk;
     let suggestedParams = await algodClient.getTransactionParams().do();
     console.log(suggestedParams);
@@ -29,9 +49,9 @@ export const Mint = (props: any) => {
       "description": "Cannabis Order Verification Certificate",
       "properties": {
         "Issuer": "PARSL",
-        "IssuedFor": "Q4MQ4GS5S3G5Z6MLRZBNJTIVPUMHFV7JU2QFO2OZHXNWE7JSHSZA",
-        "Company": "AMS",
-        "Risk": "LOW"
+        "IssuedFor": values.companyAccount,
+        "Company": values.company,
+        "Risk": values.risk
       },
       "mime_type": "image/png"
     }
@@ -40,14 +60,14 @@ export const Mint = (props: any) => {
     hash.update(JSON.stringify(metadataJson))
     const metadata = new Uint8Array(hash.digest());
     const paramsObj: any = {
-      from: client,
+      from: parsl,
       defaultFrozen: false,
-      manager: client,
+      manager: parsl,
       reserve: undefined,
-      clawback: client,
-      freeze: client,
+      clawback: parsl,
+      freeze: parsl,
       strictEmptyAddressChecking: false,
-      assetURL: "ipfs://QmepNYKTRQQDeeogGbYTBLUUi7YyxEE3KHngFRkJCMG7rZ",
+      assetURL: "ipfs://QmbykSfp8ED1jieXgs23xioKimrNKPLk6KtcJr46fgZcos",
       decimals: 0,
       total: 1,
       note: AlgoSigner.encoding.stringToByteArray(JSON.stringify(metadataJson)),
@@ -64,21 +84,19 @@ export const Mint = (props: any) => {
     let signed = []
     signed.push(signedTx.blob)
     let tx = (await algodClient.sendRawTransaction(signed).do());
+    let assetId = null;
+    const ptx = await algosdk.waitForConfirmation(algodClient, tx.txId, 4);
     console.log("Transaction: " + tx.txId);
-
-    // Wait for transaction to be confirmed
-    //await utils.waitForConfirmation(algodClient, tx.txId);
-    //AlgoSigner.signTxn([{ txn: txn_b64 }])
-/*     .then((res: any) => {
-      console.log("success sign in txn", res);
-      AlgoSigner.send({
-        ledger: "TestNet",
-        tx: res[0].blob,
-      });
-    })
-    .catch((e: any) => {
-      console.error("Error in algo txn", e);
-    }); */
+    assetId = ptx["asset-index"];
+    if(tx.txId !== undefined && assetId !== null) {
+      const transaction = `https://testnet.algoexplorer.io/tx/` + tx.txId;
+      Swal.fire(
+        'Good job!',
+        `Your token has been issued! Check <a style="text-decoration: underline" target="_blank" rel="noopener noreferrer" href=${transaction}><b>transaction</b></a>`,       
+        'success'
+      )
+      createToken(assetId, tx.txId, values.companyAccount, values.company, values.risk);
+    }
   }
 
   return (
@@ -111,8 +129,8 @@ export const Mint = (props: any) => {
           <label htmlFor="company">Company</label>
           <Field id="company" name="company" placeholder="Cannabis Business" />
 
-          <label htmlFor="companyAccont">Company Account</label>
-          <Field id="companyAccont" name="companyAccont" placeholder="Algo Account" />
+          <label htmlFor="companyAccount">Company Account</label>
+          <Field id="companyAccount" name="companyAccount" placeholder="Algo Account" />
 
           <label htmlFor="risk">Risk</label>
           <Field

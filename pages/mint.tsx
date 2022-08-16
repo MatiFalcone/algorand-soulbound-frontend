@@ -30,7 +30,7 @@ const Playground: NextPage = (props:any) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const ALGOD_SERVER = process.env.ALGOD_SERVER;
   const ALGOD_TOKEN = process.env.ALGOD_TOKEN;
   const PARSL_MNEMONIC = process.env.PARSL_MNEMONIC;
