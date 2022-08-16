@@ -166,8 +166,8 @@ export const Claim = (props: any) => {
     } else {
       return (<div>
         {tokenList?.map(({ assetId, transactionId, claimer, company, risk, claimed }, i) => (
-          <div>
-            <li key={i}> {claimer} can retrieve {assetId} </li>
+          <div key={i}>
+            <li> {claimer} can retrieve {assetId} </li>
             <button onClick={() => claimToken(props, assetId, claimer, company, risk, claimed)}>Claim</button>
           </div>
         ))}
