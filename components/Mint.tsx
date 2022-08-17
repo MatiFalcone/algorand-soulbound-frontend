@@ -5,7 +5,6 @@ import algosdk from "algosdk";
 import crypto from "crypto";
 import Swal from "sweetalert2";
 import { useState } from 'react';
-import ClipLoader from "react-spinners/ClipLoader";
 
 declare var AlgoSigner: any;
 
@@ -34,13 +33,11 @@ export const Mint = (props: any) => {
   }
 
   const issueSBT = async(props: any, values: any) => {
-    console.log(props);
     setIsLoading(true);
     const algodServer = props.props.ALGOD_SERVER;
     const token = { 
       "X-API-Key": props.props.ALGOD_TOKEN
     };
-    console.log(token);
     const port = "";
     const algodClient = new algosdk.Algodv2(token, algodServer, port);
     console.log(algodClient);

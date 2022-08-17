@@ -22,7 +22,8 @@ interface Token {
 export const Claim = (props: any) => {
   
   const [noTokens, setNoTokens] = useState(true);
-  const [tokenList, setTokenList] = useState<Array<Token>>();
+  const [tokenList, setTokenList] = useState<Array<Token>>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const refreshPage = () => {
     Router.push('/claim')
@@ -58,6 +59,8 @@ export const Claim = (props: any) => {
 
   const claimToken = async (props: any, assetId: number, orderId: number, claimer: string, company: string, risk: string) => {
     
+    setIsLoading(true);
+
     // Connect to node
     const algodServer = props.props.ALGOD_SERVER;
     const algoIndexer = props.props.ALGO_INDEXER;
@@ -210,7 +213,9 @@ export const Claim = (props: any) => {
                 <th className={styles.th}> {company} </th>
                 <th className={styles.th}> {orderId} </th>
                 <th className={styles.th}> {risk} </th>
-                <th className={styles.th}><button className={styles.goBackButton} onClick={() => claimToken(props, assetId, orderId, claimer, company, risk)}>Claim Token</button></th>
+                <th className={styles.th}><button className={styles.goBackButton} disabled={isLoading} onClick={() => claimToken(props, assetId, orderId, claimer, company, risk)
+                  .then(() => {setIsLoading(false)})
+                  .catch(() => {setIsLoading(false)})}>Claim Token</button></th>
               </tr>
             </tbody>
           ))}

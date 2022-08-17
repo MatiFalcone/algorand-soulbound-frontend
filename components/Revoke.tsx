@@ -21,7 +21,8 @@ interface Token {
 export const Revoke = (props: any) => {
   
   const [noTokens, setNoTokens] = useState(true);
-  const [tokenList, setTokenList] = useState<Array<Token>>();
+  const [tokenList, setTokenList] = useState<Array<Token>>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const refreshPage = () => {
     Router.push('/revoke')
@@ -56,6 +57,7 @@ export const Revoke = (props: any) => {
 
   const revokeToken = async (props: any, assetId: number, orderId: number, claimer: string, company: string, risk: string, claimed: boolean) => {
 
+    setIsLoading(true);
     // Connect to node
     const algodServer = props.props.ALGOD_SERVER;
     const algoIndexer = props.props.ALGO_INDEXER;
@@ -224,7 +226,9 @@ export const Revoke = (props: any) => {
                 <th className={styles.th}> {company} </th>
                 <th className={styles.th}> {orderId} </th>
                 <th className={styles.th}> {risk} </th>
-                <th className={styles.th}><button className={styles.goBackButton} onClick={() => revokeToken(props, assetId, orderId, claimer, company, risk, claimed)}>Revoke Token</button></th>
+                <th className={styles.th}><button className={styles.goBackButton} disabled={isLoading} onClick={() => revokeToken(props, assetId, orderId, claimer, company, risk, claimed)
+                .then(() => {setIsLoading(false)})
+                .catch(() => {setIsLoading(false)})}>Revoke Token</button></th>
               </tr>
             </tbody>
           ))}

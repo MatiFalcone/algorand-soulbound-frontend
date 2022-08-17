@@ -46,11 +46,12 @@ const Playground: NextPage = () => {
             Router.push('/choose_role')
           })
           .catch((e) => {
+            let url = "https://chrome.google.com/webstore/detail/algosigner/kmmolakhbgdlpkjkcjkebenjheonagdm";
             setAccountError(true);
             setAccountResponse(undefined);
             Swal.fire(
               'Error!',
-              `There was an error with AlgoSigner`,       
+              `Please, <a style="text-decoration: underline" target="_blank" rel="noopener noreferrer" href=${url}><b>install AlgoSigner</b></a>`,       
               'error'
             )
           });

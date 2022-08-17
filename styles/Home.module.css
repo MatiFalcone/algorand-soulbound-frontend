@@ -134,6 +134,7 @@
 }
 
 .mintingFormSubmitButton:disabled {
+  cursor: wait;
   display: block;
   width: 300px;
   margin: 0px auto;
@@ -143,6 +144,15 @@
 
 .goBackButton {
   cursor: pointer;
+  display: block;
+  width: 300px;
+  margin: 0px auto;
+  height: 40px;
+  font-size: 1em;
+}
+
+.goBackButton:disabled {
+  cursor: wait;
   display: block;
   width: 300px;
   margin: 0px auto;
