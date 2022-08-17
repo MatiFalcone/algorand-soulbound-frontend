@@ -34,6 +34,7 @@ export const Mint = (props: any) => {
   }
 
   const issueSBT = async(props: any, values: any) => {
+    console.log(props);
     setIsLoading(true);
     const algodServer = props.props.ALGOD_SERVER;
     const token = { 

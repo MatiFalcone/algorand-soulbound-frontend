@@ -57,7 +57,7 @@ export const Claim = (props: any) => {
   }
 
   const claimToken = async (props: any, assetId: number, orderId: number, claimer: string, company: string, risk: string) => {
-
+    
     // Connect to node
     const algodServer = props.props.ALGOD_SERVER;
     const algoIndexer = props.props.ALGO_INDEXER;
