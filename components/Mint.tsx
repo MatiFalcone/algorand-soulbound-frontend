@@ -1,14 +1,20 @@
 import { Formik, Field, Form } from 'formik';
+import React from "react";
 import styles from '../styles/Home.module.css'
 import algosdk from "algosdk";
 import crypto from "crypto";
 import Swal from "sweetalert2";
+import { useState } from 'react';
+import ClipLoader from "react-spinners/ClipLoader";
 
 declare var AlgoSigner: any;
 
 export const Mint = (props: any) => {
   
-  const createToken = async (assetId: Number, transactionId: String, claimer: String, company: String, risk: String) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const createToken = async (assetId: Number, orderId: Number, transactionId: String, claimer: String, company: String, risk: String) => {
+    // Stores token in off-chain issuer repository for future reference
     const res = await fetch("/api/token/add", {
       method: "POST",
       headers: {
@@ -16,6 +22,7 @@ export const Mint = (props: any) => {
       }, 
       body: JSON.stringify({
         assetId,
+        orderId,
         transactionId,
         claimer,
         company,
@@ -24,11 +31,10 @@ export const Mint = (props: any) => {
       })
     })
     const data = await res.json();
-    console.log(data);
   }
 
   const issueSBT = async(props: any, values: any) => {
-    console.log(values);
+    setIsLoading(true);
     const algodServer = props.props.ALGOD_SERVER;
     const token = { 
       "X-API-Key": props.props.ALGOD_TOKEN
@@ -38,19 +44,19 @@ export const Mint = (props: any) => {
     const algodClient = new algosdk.Algodv2(token, algodServer, port);
     console.log(algodClient);
     let client: string = localStorage.getItem("accountInformation")!;
-    // EHZMYXLWT7FNOTVS2DV6P4QDD6CKDLDJA5LTPWOZ7KQEA6RRCGJJSLPEDM
-    let parsl = "EHZMYXLWT7FNOTVS2DV6P4QDD6CKDLDJA5LTPWOZ7KQEA6RRCGJJSLPEDM";
+    const parslAddr = algosdk.mnemonicToSecretKey(props.props.PARSL_MNEMONIC).addr;
     const sk = algosdk.mnemonicToSecretKey(props.props.PARSL_MNEMONIC).sk;
     let suggestedParams = await algodClient.getTransactionParams().do();
     console.log(suggestedParams);
     let metadataJson = {
       "standard": "ARC5114",
+      "issuer": parslAddr,
+      "claimer": client,
       "status": "issued",
       "description": "Cannabis Order Verification Certificate",
       "properties": {
-        "Issuer": "PARSL",
-        "IssuedFor": values.companyAccount,
         "Company": values.company,
+        "Order": values.orderId,
         "Risk": values.risk
       },
       "mime_type": "image/png"
@@ -60,12 +66,12 @@ export const Mint = (props: any) => {
     hash.update(JSON.stringify(metadataJson))
     const metadata = new Uint8Array(hash.digest());
     const paramsObj: any = {
-      from: parsl,
+      from: parslAddr,
       defaultFrozen: false,
-      manager: parsl,
+      manager: parslAddr,
       reserve: undefined,
-      clawback: parsl,
-      freeze: parsl,
+      clawback: parslAddr,
+      freeze: parslAddr,
       strictEmptyAddressChecking: false,
       assetURL: "ipfs://QmbykSfp8ED1jieXgs23xioKimrNKPLk6KtcJr46fgZcos",
       decimals: 0,
@@ -77,9 +83,6 @@ export const Mint = (props: any) => {
       suggestedParams: suggestedParams,
     };
     const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject(paramsObj)
-    //const binaryTxs = txn.toByte();
-    //console.log(binaryTxs);
-    //let txn_b64 = AlgoSigner.encoding.msgpackToBase64(binaryTxs);
     let signedTx = algosdk.signTransaction(txn, sk);
     let signed = []
     signed.push(signedTx.blob)
@@ -91,11 +94,11 @@ export const Mint = (props: any) => {
     if(tx.txId !== undefined && assetId !== null) {
       const transaction = `https://testnet.algoexplorer.io/tx/` + tx.txId;
       Swal.fire(
-        'Good job!',
-        `Your token has been issued! Check <a style="text-decoration: underline" target="_blank" rel="noopener noreferrer" href=${transaction}><b>transaction</b></a>`,       
+        'Good job',
+        `Your token has been issued. Check <a style="text-decoration: underline" target="_blank" rel="noopener noreferrer" href=${transaction}><b>transaction</b></a>`,       
         'success'
       )
-      createToken(assetId, tx.txId, values.companyAccount, values.company, values.risk);
+      createToken(assetId, values.orderId, tx.txId, values.companyAccount, values.company, values.risk);
     }
   }
 
@@ -105,10 +108,10 @@ export const Mint = (props: any) => {
         <h1>Issue SoulBound Token</h1>
       </div>
       <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '8vh'}}>
-        <h6>Issues a certificate to the account specified in the <code className={styles.code}>Company Account</code>field.</h6>
+        <h6>Issue a certificate to the Algo account in the <code className={styles.code}>Company Account</code> field.</h6>
       </div>
       <br />
-      <Formik 
+      <Formik
         initialValues={{
           orderId: '',
           company: '',
@@ -116,30 +119,38 @@ export const Mint = (props: any) => {
           risk: '',
         }}
         onSubmit={async (values) => {
-          //await new Promise((r) => setTimeout(r, 500));
-          //alert(JSON.stringify(values, null, 2));
-          console.log(values);
-          issueSBT(props, values);
+          issueSBT(props, values).then(() => {
+            setIsLoading(false);
+          }).catch(()=> {
+            setIsLoading(false);
+          });
         }}
           >
         <Form>
-          <label htmlFor="orderId">Order ID</label>
-          <Field id="orderId" name="orderId" placeholder="#123" />
-
-          <label htmlFor="company">Company</label>
-          <Field id="company" name="company" placeholder="Cannabis Business" />
-
-          <label htmlFor="companyAccount">Company Account</label>
-          <Field id="companyAccount" name="companyAccount" placeholder="Algo Account" />
-
-          <label htmlFor="risk">Risk</label>
-          <Field
+          <label className={styles.mintingFormLabel} htmlFor="orderId">Order ID </label>
+          <Field className={styles.mintingFormField} id="orderId" name="orderId" placeholder="1234" />
+          <br />
+          <br />
+          <label className={styles.mintingFormLabel} htmlFor="company">Company </label>
+          <Field className={styles.mintingFormField} id="company" name="company" placeholder="Cannabis Business" />
+          <br />
+          <br />
+          <label className={styles.mintingFormLabel} htmlFor="companyAccount">Company Account </label>
+          <Field className={styles.mintingFormField} id="companyAccount" name="companyAccount" placeholder="Algo Account" />
+          <br />
+          <br />
+          <label className={styles.mintingFormLabel} htmlFor="risk">Risk </label>
+          <Field className={styles.mintingFormField}
             id="risk"
             name="risk"
             placeholder="LOW | MEDIUM | HIGH"
             type="risk"
           />
-          <button type="submit">Issue Certificate</button>
+          <br />
+          <br />
+          <br />
+          <br />
+          <button className={styles.mintingFormSubmitButton} type="submit" disabled={isLoading}>Issue Certificate </button>
         </Form>
       </Formik>
     </div>

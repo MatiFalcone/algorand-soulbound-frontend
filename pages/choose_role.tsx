@@ -23,14 +23,13 @@ const Role: NextPage = () => {
         </Head>
 
         <main className={styles.main}>
-          <a>Are you a... </a>
-          <button onClick={mint}>
-            Token Issuer
+          <button className={styles.buttonRole} onClick={mint}>
+            SBT Token Issuer
           </button>
-          <a>...or a </a>
-          <button onClick={claim}>
-            Token Claimer
-          </button><a>?</a>
+          <br />
+          <button className={styles.buttonRole} onClick={claim}>
+            SBT Token Claimer
+          </button>
         </main>
 
       </div>

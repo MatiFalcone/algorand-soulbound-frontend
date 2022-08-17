@@ -24,7 +24,9 @@ const Playground: NextPage = (props:any) => {
       <main className={styles.main}>
         <Claim props={props}></Claim>
         <br />
-        <button onClick={back}>
+        <br />
+        <br />
+        <button className={styles.goBackButton} onClick={back}>
           Go Back
         </button>
       </main>

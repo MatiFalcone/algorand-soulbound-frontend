@@ -19,11 +19,20 @@ const tokenSchema = new Schema({
         type: String,
         required: true
     },
+    orderId: {
+        type: Number,
+        required: true
+    },
     risk: {
         type: String,
         required: true
     },
     claimed: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    revoked: {
         type: Boolean,
         required: true,
         default: false

@@ -22,5 +22,8 @@ a {
   body {
     color: white;
     background: black;
+    background-image: url("../public/background.jpg");
+    background-size:cover;
+    background-repeat: no-repeat;
   }
 }

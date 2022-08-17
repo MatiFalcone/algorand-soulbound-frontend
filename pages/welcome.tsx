@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate, BrowserRouter } from 'react-router-dom';
 import Router from 'next/router'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -9,6 +8,10 @@ const Role: NextPage = () => {
 
   const begin = () => {
     Router.push('/mint')
+  }
+
+  const revoke = () => {
+    Router.push('/revoke')
   }
 
   const back = () => {
@@ -24,13 +27,21 @@ const Role: NextPage = () => {
         </Head>
 
         <main className={styles.main}>
-          <a>Here you can issue certificates to Cannabis Businesses.</a>
+          <h3>Here you can issue certificates to Cannabis Businesses.</h3>
           <br />
-          <button onClick={begin}>
+          <button className={styles.button} onClick={begin}>
             Simulate Parsl Token Issuance
           </button>
           <br />
-          <button onClick={back}>
+          <h4>You can also revoke them if required.</h4>
+          <br />
+          <button className={styles.button} onClick={revoke}>
+            Simulate Parsl Token Revoking
+          </button>
+          <br />
+          <br />
+          <br />
+          <button className={styles.goBackButton} onClick={back}>
             Go Back
           </button>
         </main>
