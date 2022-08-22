@@ -43,7 +43,7 @@ const Home: NextPage = () => {
             </p>
           </a>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
+          <a target="_blank" rel="noopener noreferrer" href="https://github.com/MatiFalcone/algorand-soulbound/blob/main/README.md" className={styles.card}>
             <h2>Learn &rarr;</h2>
             <p>Learn about our industry and the problem we are solving.</p>
           </a>
@@ -54,7 +54,7 @@ const Home: NextPage = () => {
           </a>
 
           <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            target="_blank" rel="noopener noreferrer" href="https://github.com/MatiFalcone/algorand-soulbound#our-team-%EF%B8%8F"
             className={styles.card}
           >
             <h2>Team &rarr;</h2>
