@@ -33,8 +33,8 @@ const Home: NextPage = () => {
             </a>
           </Link>
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+          <a target="_blank" rel="noopener noreferrer"
+            href="https://www.youtube.com/watch?v=5ujm5RIS9K0"
             className={styles.card}
           >
             <h2>Video &rarr;</h2>
